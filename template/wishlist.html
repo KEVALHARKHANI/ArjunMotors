@@ -1,0 +1,149 @@
+{% extends 'main.html'%}
+<head>
+    <style>
+td{
+border-bottom: 1px solid #ddd;
+}
+
+    </style>
+
+
+</head>
+{%block content%}
+<script>
+    {%for msg in messages%}
+        alert('{{msg}}')
+    {%endfor%}
+</script>
+<div id="new" style="display:none;">
+<center> <button onclick="showd()">wishlist</button></center>
+    <br><br>
+        <center>
+        <form action="/add_to_wishlist" method="post">
+            {%csrf_token%}
+            <table>
+                <tr>
+                    <td><input type="text" name="product" placeholder="product name"></td>
+                <td><input type="text" name="car" placeholder="car name"></td>
+                <td><input type="text" name="category" placeholder="add Model"></td>
+                 <td><input type="text" name="quantity" placeholder="add quantity"></td>
+                <td><input type="text" name="description" placeholder="add description"></td>
+                </tr>
+
+            </table>
+                    <button type="submit">Add</button>
+            </form>
+            </center>
+        <br><br>
+
+</div>
+<div id="wl" style="display:block;">
+    {%if product%}
+
+    <center> <button onclick="hided()">add wishlist</button></center>
+    <form action="/move_to_product" method="post" enctype = "multipart/form-data">
+        <input type="hidden" name="items" id="items">
+        {%csrf_token%}
+        <br><br><br><br><br><br>
+        <div style="background-color:white; width:80%; max-height:400px; margin:10px auto; overflow-x: hidden;overflow-y: scroll;" id="add">
+        <table style="width: 100%;">
+            {%for i in product%}
+
+
+            <tr>
+                <td style="text-align: center;border-bottom: 1px solid #ddd;"><input type="checkbox" name="cart{{i.id}}" onclick="req({{i.id}})"></td>
+                <td style="text-align: center;border-bottom: 1px solid #ddd;">{{i.product}}</td>
+                <td style="text-align: center;border-bottom: 1px solid #ddd;">{{i.car}}</td>
+                <td style="text-align: center;border-bottom: 1px solid #ddd;">{{i.category}}</td>
+                <td style="text-align: center;border-bottom: 1px solid #ddd;">{{i.description}}</td>
+                <td style="text-align: center;border-bottom: 1px solid #ddd;"><input type="text" name="quantity{{i.id}}" id="quantity{{i.id}}" placeholder="add quantity" value="{{i.wquantity}}"></td>
+                <td style="text-align: center;border-bottom: 1px solid #ddd;"><input type="text" name="price{{i.id}}" id="price{{i.id}}"  placeholder="add price" hidden></td>
+                <td style="text-align: center;border-bottom: 1px solid #ddd;"><input type="text" name="location{{i.id}}" id="location{{i.id}}" onkeyup="capi({{i.id}})"  placeholder="add location" hidden></td>
+                <td style="text-align: center;border-bottom: 1px solid #ddd;"><input type="file" accept="image/*" name="photo{{i.id}}" id="photo{{i.id}}" style="display:none"></td>
+            </tr>
+
+
+        {%endfor%}
+            </table>
+        </div>
+        <br>
+        {%if product%}<center><button type="submit">SAVE</button></center>{%endif%}
+
+        </form>
+    </div>
+    {%else%}
+<center> <button onclick="hided()">add wishlist</button></center>
+<center><h3>Wishlist is empty!!!!Add some product</h3></center>
+    {%endif%}
+<script>
+
+        function req(i){
+        var qlity=document.getElementById('quantity'+i);
+        var price=document.getElementById('price'+i);
+        var location=document.getElementById('location'+i);
+        var items=document.getElementById('items');
+        var photo=document.getElementById('photo'+i);
+            if(items.value.includes(i))
+            {
+                items.value = items.value.replace(i+"-", "");
+            }else{
+                items.value=items.value+i+'-';
+            }
+
+
+
+
+            if(qlity.required==false && price.required==false)
+            {
+                qlity.required=true;
+                price.required=true;
+                location.required=true;
+
+
+            }else{
+                qlity.required=false;
+                price.required=false;
+                location.required=true;
+            }
+            if(price.hidden==true || location.hidden==true)
+            {
+                price.hidden=false;
+                location.hidden=false;
+                photo.style.display="block";
+            }else{
+                price.hidden=true;
+                location.hidden=true;
+                photo.style.display="none";
+             }
+
+        }
+
+
+        function showd()
+        {
+            var newe=document.getElementById('new');
+            var wl=document.getElementById('wl');
+                wl.style.display='block';
+                newe.style.display='none';
+
+        }
+
+        function hided()
+        {
+            var newe=document.getElementById('new');
+            var wl=document.getElementById('wl');
+            wl.style.display='none';
+                newe.style.display='block';
+        }
+    function capi(i)
+        {
+            var location=document.getElementById('location'+i);
+            location.value=location.value.toUpperCase();
+            }
+
+
+</script>
+
+
+{%endblock%}
+

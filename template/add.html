@@ -1,0 +1,83 @@
+{% extends 'main.html'%}
+<head>
+    <style>
+    table{
+        width: 100%;
+    }
+        td{
+            text-align: center;
+
+        }
+
+    </style>
+
+
+</head>
+{%block content%}
+<script>
+    {%for msg in messages%}
+        alert('{{msg}}')
+    {%endfor%}
+</script>
+<h1 class="text-center"><span class="bdots">&bullet;</span>Add<span class="carstxt">Products</span>&bullet;</h1>
+
+
+        <center>
+        <form action="/product" method="post">
+            {%csrf_token%}
+        <td><input type="text" name="number" placeholder="Enter number" value="{{num_len}}" required></td>
+            <td><button type="submit">enter</button></td>
+            </form>
+            </center>
+        <br><br>
+
+    <form action="/save" method="post"  enctype = "multipart/form-data">
+        {%csrf_token%}
+        <br>
+        <div style="background-color:white; width:100%; max-height:400px; margin:0 auto; overflow-x: hidden;
+  overflow-y: scroll;" id="add" >
+            {%if num%}
+                <table >
+
+                    <tr>
+                       <td></td> <td><b>Product Name</b><td><b>Car Name</b></td></td><td><b>Model Name</b></td> <td><b>Quantity</b></td> <td><b>Price</b></td>
+                        <td><b>Decription</b></td> <td><b>Location</b></td> <td><b>Image</b></td>
+                    </tr>
+        {%for i in num%}
+
+
+            <tr>
+                <td><input type="text" name="number" placeholder="Enter number" value="{{num_len}}" hidden></td>
+                <td><input type="text" name="product{{i}}" placeholder="product name"></td>
+                <td><input type="text" name="car{{i}}" placeholder="car name"></td>
+                <td><input type="text" name="category{{i}}" placeholder="add Model"></td>
+                 <td><input type="text" name="quantity{{i}}" placeholder="add quantity"  ></td>
+                <td><input type="text" name="price{{i}}" placeholder="add price" ></td>
+                <td><input type="text" name="description{{i}}" placeholder="add description"></td>
+                <td><input type="text" name="location{{i}}" id="location{{i}}" placeholder="add location" onkeyup="capi()" pattern="([A-K]|[a-k])[0-7]" title="Enter valid location"></td>
+                <td><input type="file" accept="image/*" name="image{{i}}"></td>
+            </tr>
+
+
+        {%endfor%}
+                    </table>
+        </div>
+        <br>
+        <center><button type="submit">SAVE</button></center>{%endif%}
+
+        </form>
+
+<script>
+        function capi()
+        {
+            for(i=0;i<={{num_len}};i++){
+            var location=document.getElementById('location'+i);
+            location.value=location.value.toUpperCase();
+            }
+        }
+
+</script>
+
+
+{%endblock%}
+
